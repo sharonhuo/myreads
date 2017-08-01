@@ -34,6 +34,7 @@ class ControlItem extends Component {
     //Because on windows machine, there won't be a check mark once an item is selected.
     //So you will have to use a html code &#10004;to show the check mark.
     //But on a Macbook, it just works with above code.
+    //TODO: Find a way that make select with check mark working on both Macbook and windows.
 
     /*return (
       <div className="book-shelf-changer">
