@@ -22,7 +22,10 @@ class BookItem extends Component {
 
   render() {
     const book = this.props.book;
-    const imageUrl = book.imageLinks.thumbnail;
+    //Some books doesn't have imageLinks, e.g book title: "My First Life",
+    //when searching by Biography
+    const imageUrl = book.imageLinks !== undefined ? book.imageLinks.thumbnail : "";
+
     return (
       <li>
         <div className="book">

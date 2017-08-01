@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
+import sortBy from 'sort-by'
 import BookItem from "./BookItem";
 
 class ListBooks extends Component {
@@ -16,6 +17,8 @@ class ListBooks extends Component {
 
   render () {
     const bookList = this.props.books;
+    bookList.sort(sortBy('title'));
+
     return (
       <div className="bookshelf-books">
         <ol className="books-grid">

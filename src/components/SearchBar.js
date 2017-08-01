@@ -15,7 +15,11 @@ class SearchBar extends Component {
 
   onInputChange(term) {
     this.setState({ term });
-    this.props.onSearchTermChange(term);
+    //BooksAPI returns 403 if entered a search string then using backspace to
+    //clean up the input string
+    if (term.length > 0) {
+      this.props.onSearchTermChange(term);
+   }
   }
 
   cleanSeachResult() {
@@ -29,8 +33,8 @@ class SearchBar extends Component {
   }
 
   render() {
-    console.log("search term===", this.state);
     const { books } = this.props;
+
     return (
       <div className="search-books">
         <div className="search-books-bar">

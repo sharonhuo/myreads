@@ -30,6 +30,7 @@ class BooksApp extends Component {
   * @description Set the state when moving the book
   * @param {string} toShelf - The shelf that the book is going to be moved to
   * @param {object} book - The book that is currectly moving
+  * TODO: add the loading loading spinner when changing the shelf
   */
   changeShelf = (toShelf, book) => {
     const orgBookShelf = book.shelf;
@@ -56,30 +57,30 @@ class BooksApp extends Component {
 
   searchBooks = (term) => {
     const booksOnMyShelf = this.state.currentlyReadingList.concat(this.state.wantToReadList, this.state.readList);
-    BooksAPI.search(term, 20).then((data) => {
 
+    BooksAPI.search(term, 20).then((data) => {
     //Since the search result is not based on the token, it can come from
     //differnt end points, so we need to reset the book shelf to "none" when
     //if the book is not on my own book shelf
-    if (data !== null && data !== undefined && data.length > 0) {
-      data.map((item) => {
-        const bookOnSelf = booksOnMyShelf.filter((c) => c.id === item.id) ;
-        //If the book is not in my book shelf, set the shelf to null
-        if (bookOnSelf.length === 0) {
-          item.shelf = '';
-        } else {
-          //otherwise set it to the same as my shelf
-          item.shelf = bookOnSelf[0].shelf;
+      if (data !== null && data !== undefined && data.length > 0) {
+        for (let item of data) {
+          const bookOnSelf = booksOnMyShelf.filter((c) => c.id === item.id) ;
+          //If the book is not in my book shelf, set the shelf to null
+          if (bookOnSelf.length === 0) {
+            item.shelf = '';
+          } else {
+            //otherwise set it to the same as my shelf
+            item.shelf = bookOnSelf[0].shelf;
+          }
         }
-      })
-    }
+      }
 
-    this.setState((state) => ({
-      currentlyReadingList: state.currentlyReadingList,
-      wantToReadList: state.wantToReadList,
-      readList: state.readList,
-      searchResultList: data
-      }))
+      this.setState((state) => ({
+        currentlyReadingList: state.currentlyReadingList,
+        wantToReadList: state.wantToReadList,
+        readList: state.readList,
+        searchResultList: data
+        }))
     });
   }
 
@@ -96,8 +97,7 @@ class BooksApp extends Component {
   }
 
   render() {
-    const { currentlyReadingList, wantToReadList, readList, searchResultList} = this.state;
-    console.log('searchResultList', searchResultList);
+    const { currentlyReadingList, wantToReadList, readList} = this.state;
     const shelves = [
       {title: "Currently Reading", list: currentlyReadingList},
       {title: "Want to Read", list: wantToReadList},
@@ -134,7 +134,7 @@ class BooksApp extends Component {
       </div>
       )
     }/>
-    <Route path='/search' render={({ history }) => (
+    <Route path='/search' render={() => (
       <SearchBar
          className='search-books-bar'
          books={this.state.searchResultList}
