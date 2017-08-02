@@ -16,7 +16,15 @@ class ListBooks extends Component {
   }
 
   render () {
-    const bookList = this.props.books;
+    let bookList = this.props.books;
+    console.log("before remove", bookList);
+    //remove duplicated books that have the same Ids, otherwise
+    //we will have warning
+    bookList = bookList.filter((thing, index, self) => 
+    self.findIndex(t => t.id === thing.id) === index);
+
+    console.log("after remove", bookList);
+
     bookList.sort(sortBy('title'));
 
     return (
